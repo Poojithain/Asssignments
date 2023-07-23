@@ -1,0 +1,663 @@
+class CumulativeMultipleArray {
+    private int[] arrNum;
+
+    public CumulativeMultipleArray(int[] arrNum) {
+        this.arrNum = arrNum;
+    }
+
+    public void calculateCumulativeMultiple() {
+        int cumulativeMultiple = 1;
+        for (int i = 0; i < arrNum.length; i++) {
+            // Handling the exception when the current element is 0
+            if (arrNum[i] == 0) {
+                arrNum[i] = 0;
+                continue;
+            }
+
+            try {
+                cumulativeMultiple *= arrNum[i];
+                arrNum[i] = cumulativeMultiple;
+            } catch (ArithmeticException e) {
+                System.out.println("Error occurred during cumulative multiple calculation.");
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void printArray() {
+        for (int num : arrNum) {
+            System.out.print(num + " ");
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        int[] arrNum = {5, 3, 4, 2, 0, 8};
+        CumulativeMultipleArray arrayObj = new CumulativeMultipleArray(arrNum);
+        arrayObj.calculateCumulativeMultiple();
+        arrayObj.printArray();
+    }
+}
+
+
+----------------------------------------------------
+import java.util.ArrayList;
+import java.util.List;
+
+class MissingNumbersFinder {
+    private int[] arrNum;
+    private int maxNum;
+
+    public MissingNumbersFinder(int[] arrNum) {
+        this.arrNum = arrNum;
+        this.maxNum = arrNum[arrNum.length - 1];
+    }
+
+    public List<Integer> findMissingNumbers() {
+        List<Integer> missingNumbers = new ArrayList<>();
+        int currentNum = 1; // Start from the first number
+
+        for (int i = 0; i < arrNum.length; i++) {
+            while (currentNum < arrNum[i]) {
+                missingNumbers.add(currentNum);
+                currentNum++;
+            }
+            currentNum++; // Move to the next number in the array
+        }
+
+        // Add any missing numbers after the last element in the array
+        while (currentNum <= maxNum) {
+            missingNumbers.add(currentNum);
+            currentNum++;
+        }
+
+        return missingNumbers;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        int[] arrNum1 = {1, 2, 4, 5, 6};
+        int[] arrNum2 = {1, 2, 3, 5, 6, 8, 10, 11, 14};
+
+        MissingNumbersFinder finder1 = new MissingNumbersFinder(arrNum1);
+        List<Integer> missingNumbers1 = finder1.findMissingNumbers();
+        System.out.println("Missing Numbers in arrNum1: " + missingNumbers1);
+
+        MissingNumbersFinder finder2 = new MissingNumbersFinder(arrNum2);
+        List<Integer> missingNumbers2 = finder2.findMissingNumbers();
+        System.out.println("Missing Numbers in arrNum2: " + missingNumbers2);
+    }
+}
+
+}
+--------------------------------------------
+import java.util.HashMap;
+import java.util.Map;
+
+class SocksArray {
+    private int[] arrNum;
+
+    public SocksArray(int[] arrNum) {
+        this.arrNum = arrNum;
+    }
+
+    public int countSingularSocks() {
+        // Create a HashMap to store the count of each sock ID
+        Map<Integer, Integer> sockCountMap = new HashMap<>();
+        int singularSocksCount = 0;
+
+        // Count the occurrence of each sock ID in the array
+        for (int sockId : arrNum) {
+            sockCountMap.put(sockId, sockCountMap.getOrDefault(sockId, 0) + 1);
+        }
+
+        // Calculate the count of singular socks
+        for (int count : sockCountMap.values()) {
+            if (count % 2 != 0) {
+                singularSocksCount++;
+            }
+        }
+
+        return singularSocksCount;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        int[] arrNum = {10, 20, 20, 10, 10, 30, 50, 10, 20};
+        SocksArray socksArray = new SocksArray(arrNum);
+        int singularSocksCount = socksArray.countSingularSocks();
+        System.out.println("Count of singular socks = " + singularSocksCount);
+    }
+}
+----------------------------------------------------------------
+4)
+import java.io.*;
+import java.util.*;
+
+public class Solution {
+
+    public static void main(String[] args) {
+        Scanner escaner = new Scanner(System.in);
+        int n = escaner.nextInt();
+        int[] numArray = new int[n];
+        for (int j=0; j < numArray.length; j++){
+            int num = escaner.nextInt();
+            numArray[j] = num;
+        }
+
+        int contSumasNeg = 0;
+        int longi = 1;
+        while (longi <= numArray.length) {
+            for (int i=0; i+longi <= numArray.length; i++){
+                int[] subArray = Arrays.copyOfRange(numArray, i, i+longi);
+                int suma = Arrays.stream(subArray).sum();
+                if (suma < 0){
+                    contSumasNeg++;
+                }
+            }
+            longi++;
+        }
+        System.out.println(contSumasNeg);
+    }  
+}
+
+-------------------------------------------------------------------
+5)
+class ListNode {
+    int val;
+    ListNode next;
+
+    ListNode(int val) {
+        this.val = val;
+        this.next = null;
+    }
+}
+
+class MergeAndSortLinkedList {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        // Create a dummy node as the head of the merged list
+        ListNode dummyHead = new ListNode(-1);
+        ListNode current = dummyHead;
+
+        // Traverse both lists and merge them in sorted order
+        while (l1 != null && l2 != null) {
+            if (l1.val <= l2.val) {
+                current.next = l1;
+                l1 = l1.next;
+            } else {
+                current.next = l2;
+                l2 = l2.next;
+            }
+            current = current.next;
+        }
+
+        // Attach any remaining nodes of l1 or l2, if present
+        if (l1 != null) {
+            current.next = l1;
+        }
+        if (l2 != null) {
+            current.next = l2;
+        }
+
+        return dummyHead.next;
+    }
+}
+
+public class Main {
+    public static void printLinkedList(ListNode head) {
+        ListNode current = head;
+        while (current != null) {
+            System.out.print(current.val + "->");
+            current = current.next;
+        }
+        System.out.print("null");
+    }
+
+    public static void main(String[] args) {
+        // Create the first linked list: 25->35->12->4->36->48
+        ListNode l1 = new ListNode(25);
+        l1.next = new ListNode(35);
+        l1.next.next = new ListNode(12);
+        l1.next.next.next = new ListNode(4);
+        l1.next.next.next.next = new ListNode(36);
+        l1.next.next.next.next.next = new ListNode(48);
+
+        // Create the second linked list: 8->32->22->45->63->49
+        ListNode l2 = new ListNode(8);
+        l2.next = new ListNode(32);
+        l2.next.next = new ListNode(22);
+        l2.next.next.next = new ListNode(45);
+        l2.next.next.next.next = new ListNode(63);
+        l2.next.next.next.next.next = new ListNode(49);
+
+        MergeAndSortLinkedList merger = new MergeAndSortLinkedList();
+        ListNode mergedList = merger.mergeTwoLists(l1, l2);
+
+        System.out.print("Output: ");
+        printLinkedList(mergedList);
+    }
+}
+---------------------------------------------------------------------
+6)
+class ListNode {
+    int val;
+    ListNode next;
+
+    ListNode(int val) {
+        this.val = val;
+        this.next = null;
+    }
+}
+
+class RemoveDuplicatesLinkedList {
+    public ListNode removeDuplicates(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+
+        ListNode current = head;
+        while (current != null && current.next != null) {
+            if (current.val == current.next.val) {
+                current.next = current.next.next;
+            } else {
+                current = current.next;
+            }
+        }
+
+        return head;
+    }
+}
+
+public class Main {
+    public static void printLinkedList(ListNode head) {
+        ListNode current = head;
+        while (current != null) {
+            System.out.print(current.val + "->");
+            current = current.next;
+        }
+        System.out.print("null");
+    }
+
+    public static void main(String[] args) {
+        // Create the linked list: 2->5->12->2->3->5->1->2->5->5
+        ListNode head = new ListNode(2);
+        head.next = new ListNode(5);
+        head.next.next = new ListNode(12);
+        head.next.next.next = new ListNode(2);
+        head.next.next.next.next = new ListNode(3);
+        head.next.next.next.next.next = new ListNode(5);
+        head.next.next.next.next.next.next = new ListNode(1);
+        head.next.next.next.next.next.next.next = new ListNode(2);
+        head.next.next.next.next.next.next.next.next = new ListNode(5);
+        head.next.next.next.next.next.next.next.next.next = new ListNode(5);
+
+        RemoveDuplicatesLinkedList remover = new RemoveDuplicatesLinkedList();
+        ListNode updatedHead = remover.removeDuplicates(head);
+
+        System.out.print("Output: ");
+        printLinkedList(updatedHead);
+    }
+}
+----------------------------------------------------------------------------------------
+7)
+public class LongestPalindromicSubstring {
+
+    public static String longestPalindrome(String s) {
+        if (s == null || s.length() == 0) {
+            return "";
+        }
+
+        int n = s.length();
+        boolean[][] dp = new boolean[n][n];
+
+        // All substrings of length 1 are palindromes
+        for (int i = 0; i < n; i++) {
+            dp[i][i] = true;
+        }
+
+        int start = 0; // Start index of the longest palindromic substring
+        int maxLength = 1; // Length of the longest palindromic substring
+
+        // Check for substrings of length 2
+        for (int i = 0; i < n - 1; i++) {
+            if (s.charAt(i) == s.charAt(i + 1)) {
+                dp[i][i + 1] = true;
+                start = i;
+                maxLength = 2;
+            }
+        }
+
+        // Check for substrings of length >= 3
+        for (int len = 3; len <= n; len++) {
+            for (int i = 0; i < n - len + 1; i++) {
+                int j = i + len - 1;
+                if (s.charAt(i) == s.charAt(j) && dp[i + 1][j - 1]) {
+                    dp[i][j] = true;
+                    if (len > maxLength) {
+                        start = i;
+                        maxLength = len;
+                    }
+                }
+            }
+        }
+
+        return s.substring(start, start + maxLength);
+    }
+
+    public static void main(String[] args) {
+        String input = "cbbd";
+        String result = longestPalindrome(input);
+        System.out.println("Longest Palindromic Substring: " + result);
+    }
+}
+--------------------------------------------------------------------------
+8)
+public static void main(String []argh)
+	{
+		Scanner sc = new Scanner(System.in);
+
+        while (sc.hasNext()) {
+            Stack<Character> stack = new Stack<>();
+            boolean res = true;
+            
+			String input=sc.next();
+            
+            for (int i = 0; i < input.length(); i++) {
+                
+                if (input.charAt(i) == '{' || input.charAt(i) == '[' || input.charAt(i) == '(') {
+                    stack.push(input.charAt(i));
+                } else {
+                    // must not be empty
+                    // top should be equal to new input = pop
+                    if ( !stack.isEmpty() && stack.peek() == reverse(input.charAt(i))) {
+                        stack.pop();
+                    }
+                    
+                    else {
+                        res = false;
+                        break;
+                    }
+                }    
+            }
+            
+             if(stack.isEmpty() && res){
+                System.out.println("true");
+            }
+            else{
+                System.out.println("false");
+            }
+            
+		}
+
+	}
+    
+    static Character reverse(Character s) {
+        if (s == '}') {return '{';}
+        if (s == ']') {return '[';}
+        if (s == ')') {return '(';}
+        
+        return null;
+    } 
+----------------------------------------------------
+9)
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Scanner;
+
+class Student {
+    private final int id;
+    private final String name;
+    private final double cgpa;
+
+    public Student(int id, String name, double cgpa) {
+        this.id = id;
+        this.name = name;
+        this.cgpa = cgpa;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getCgpa() {
+        return cgpa;
+    }
+}
+
+class Priorities {
+    public List<Student> getStudents(List<String> events) {
+        PriorityQueue<Student> queue = new PriorityQueue<>(
+            Comparator.comparing(Student::getCgpa).reversed()
+                .thenComparing(Student::getName)
+                .thenComparing(Student::getId)
+        );
+        for (String event : events) {
+            String[] parts = event.split("\\s+");
+            if (parts[0].equals("ENTER")) {
+                String name = parts[1];
+                double cgpa = Double.parseDouble(parts[2]);
+                int id = Integer.parseInt(parts[3]);
+                Student student = new Student(id, name, cgpa);
+                queue.add(student);
+            } else if (parts[0].equals("SERVED")) {
+                queue.poll();
+            }
+        }
+        List<Student> students = new ArrayList<>(queue);
+        students.sort(Comparator.comparing(Student::getCgpa).reversed()
+            .thenComparing(Student::getName)
+            .thenComparing(Student::getId)
+        );
+        return students;
+    }
+}
+-----------------------------------------------------------
+10)
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Scanner;
+
+class Student {
+    private final int id;
+    private final String name;
+    private final double cgpa;
+
+    public Student(int id, String name, double cgpa) {
+        this.id = id;
+        this.name = name;
+        this.cgpa = cgpa;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getCgpa() {
+        return cgpa;
+    }
+}
+
+class Priorities {
+    public List<Student> getStudents(List<String> events) {
+        PriorityQueue<Student> queue = new PriorityQueue<>(
+            Comparator.comparing(Student::getCgpa).reversed()
+                .thenComparing(Student::getName)
+                .thenComparing(Student::getId)
+        );
+        for (String event : events) {
+            String[] parts = event.split("\\s+");
+            if (parts[0].equals("ENTER")) {
+                String name = parts[1];
+                double cgpa = Double.parseDouble(parts[2]);
+                int id = Integer.parseInt(parts[3]);
+                Student student = new Student(id, name, cgpa);
+                queue.add(student);
+            } else if (parts[0].equals("SERVED")) {
+                queue.poll();
+            }
+        }
+        List<Student> students = new ArrayList<>(queue);
+        students.sort(Comparator.comparing(Student::getCgpa).reversed()
+            .thenComparing(Student::getName)
+            .thenComparing(Student::getId)
+        );
+        return students;
+    }
+}
+---------------------------------------------------------------------
+11)
+class ListNode {
+    int val;
+    ListNode next;
+
+    ListNode(int val) {
+        this.val = val;
+        this.next = null;
+    }
+}
+
+public class SwapAdjacentNodes {
+
+    public ListNode swapPairs(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+        ListNode prev = dummy;
+
+        while (head != null && head.next != null) {
+            ListNode firstNode = head;
+            ListNode secondNode = head.next;
+
+            // Swapping the nodes
+            prev.next = secondNode;
+            firstNode.next = secondNode.next;
+            secondNode.next = firstNode;
+
+            // Update head and prev for the next iteration
+            prev = firstNode;
+            head = firstNode.next;
+        }
+
+        return dummy.next;
+    }
+
+    public static void printLinkedList(ListNode head) {
+        ListNode current = head;
+        while (current != null) {
+            System.out.print(current.val + "->");
+            current = current.next;
+        }
+        System.out.print("null");
+    }
+
+    public static void main(String[] args) {
+        // Create the linked list: 1->2->3->4
+        ListNode head = new ListNode(1);
+        head.next = new ListNode(2);
+        head.next.next = new ListNode(3);
+        head.next.next.next = new ListNode(4);
+
+        SwapAdjacentNodes swapper = new SwapAdjacentNodes();
+        ListNode swappedHead = swapper.swapPairs(head);
+
+        System.out.print("Output: ");
+        printLinkedList(swappedHead);
+    }
+}
+-----------------------------------------------------------
+12)
+class ListNode {
+    int val;
+    ListNode next;
+
+    ListNode(int val) {
+        this.val = val;
+        this.next = null;
+    }
+}
+
+public class ReverseKGroup {
+
+    public ListNode reverseKGroup(ListNode head, int k) {
+        if (head == null || k == 1) {
+            return head;
+        }
+
+        int count = 0;
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+        ListNode current = dummy;
+        ListNode prevTail = dummy;
+
+        while (current.next != null) {
+            current = current.next;
+            count++;
+
+            if (count % k == 0) {
+                prevTail = reverseSubList(prevTail, current.next);
+                current = prevTail;
+            }
+        }
+
+        return dummy.next;
+    }
+
+    private ListNode reverseSubList(ListNode prevTail, ListNode nextHead) {
+        ListNode prev = prevTail.next;
+        ListNode current = prev.next;
+        ListNode next, temp;
+
+        while (current != nextHead) {
+            next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+
+        temp = prevTail.next;
+        prevTail.next.next = nextHead;
+        prevTail.next = prev;
+
+        return temp;
+    }
+
+    public static void printLinkedList(ListNode head) {
+        ListNode current = head;
+        while (current != null) {
+            System.out.print(current.val + "->");
+            current = current.next;
+        }
+        System.out.print("null");
+    }
+
+    public static void main(String[] args) {
+        // Create the linked list: 1->2->3->4->5
+        ListNode head = new ListNode(1);
+        head.next = new ListNode(2);
+        head.next.next = new ListNode(3);
+        head.next.next.next = new ListNode(4);
+        head.next.next.next.next = new ListNode(5);
+
+        int k = 2;
+
+        ReverseKGroup reverser = new ReverseKGroup
+
+
